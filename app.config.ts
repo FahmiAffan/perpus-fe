@@ -6,4 +6,5 @@ export default defineAppConfig({
             'nuxt': 'logos:nuxt-icon',
         }
     },
+    
 })

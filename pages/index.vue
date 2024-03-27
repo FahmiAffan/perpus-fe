@@ -1,47 +1,22 @@
 <template>
+  <!-- <div class="h-screen bg-[#7E30E1] flex flex-row container mx-auto">
+    <div class="columns-6 h-5 border-4 border-[red] w-full"></div>
+    <div class="columns-6 h-5 border-4 border-[red] w-full"></div>
+  </div> -->
   <div>
-    <form @submit.prevent="Submit()" class="flex flex-col">
-      <InputText type="text" variant="filled" v-model="form.email" />
-      <InputText type="text" variant="filled" v-model="form.password" />
-      <Button type="submit" label="Halo" severity="warning">
-        <h1>Haloo</h1>
-        <Icon name="mdi:eye" class="ml-6" />
-      </Button>
-    </form>
+    <Button class="text-white dark:text-white" @click="submitBtn">
+      Click Me!
+    </Button>
   </div>
 </template>
 
 <script setup>
-import { useToast } from "vue-toastification";
 
-const otp = "";
-const apiUrl = "";
-const config = useRuntimeConfig();
-const self = useNuxtApp();
-let data;
-let form = reactive({
-  email: "",
-  password: "",
-});
+let self = useNuxtApp();
 
-async function Submit() {
-  self.$axios.post('/login',{
-    email: form.email,
-    password: form.password
-  }).then((res)=>{
-    console.log(res.data)
-  }).catch((err) => {
-    console.log(err.response.data)
-  })
-}
-onMounted(() => {
-  // console.log(self.$toast('lohe'));
-  self.$toast("kohee");
-  self.$axios.get("user").then((res) => {
-    console.log(res);
-    data = res.data;
-  });
-});
+let submitBtn = () => {
+  console.log("clicked");
+};
 </script>
 
 <style>

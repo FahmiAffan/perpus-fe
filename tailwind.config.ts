@@ -38,4 +38,9 @@ module.exports = {
         },
     },
     plugins: [],
+    compilerOptions: {
+        "types": [
+            "@nuxtjs/auth-next",
+        ]
+    },
 }
