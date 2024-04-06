@@ -1,17 +1,12 @@
-import Toast, { POSITION, useToast } from "vue-toastification";
-import "vue-toastification/dist/index.css";
+// import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+import { useToast } from 'primevue/usetoast';
 
 export default defineNuxtPlugin(() => {
-    // useNuxtApp().vueApp.use(Toast, {
-    //     position: POSITION.TOP_LEFT
-    // });
-
-    useNuxtApp().vueApp.use(Toast);
-    
+    useNuxtApp().vueApp.use(ToastService);
     return {
         provide: {
             toast: useToast()
         }
     }
-
 })

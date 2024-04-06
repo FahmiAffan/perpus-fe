@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-[100vh] justify-center items-center futura">
-    <Card class="w-[414px]" v-if="attempted">
+    <Card class="w-[414px]" v-if="data.step == 1">
       <template #content>
         <h1
           class="text-[24px] text-[#000000] font-medium text-center pb-[23px]"
@@ -12,7 +12,7 @@
             alt=""
           ></Image>
         </h1>
-        <Form @submit.prevent="Submit()" class="flex flex-col">
+        <form @submit.prevent="Submit()" class="flex flex-col">
           <label for="email" class="text-[#000000] font-semibold text-[12px]"
             >Username or email</label
           >
@@ -73,7 +73,7 @@
 
             <h1 class="font-bold">Sign In With Google</h1>
           </Button>
-        </Form>
+        </form>
       </template>
     </Card>
     <Card class="w-[414px]" v-else>
@@ -87,7 +87,7 @@
           <p class="text-[13px] text-[#A6A6A6]">prevent the correct otp code</p>
         </div>
         <!-- prevent the correct otp code -->
-        <Form @submit.prevent="sendCode()" class="flex flex-col">
+        <form @submit.prevent="sendCode()" class="flex flex-col">
           <InputOtp
             :length="6"
             class="pb-6 flex w-full"
@@ -98,7 +98,8 @@
             type="submit"
             class="h-[51px] text-[#7E30E1] hover:bg-[#994DF6]"
           >
-            <h1 class="font-bold">Send</h1>
+            <h1 class="font-bold text-[24px]">Send</h1>
+            <Icon name="fa:send" class="w-[21px] ml-[8px]"></Icon>
           </Button>
           <Divider></Divider>
 
@@ -110,7 +111,7 @@
               Resend Code
             </span>
           </div>
-        </Form>
+        </form>
       </template>
     </Card>
   </div>
@@ -121,7 +122,10 @@
 const config = useRuntimeConfig();
 const self = useNuxtApp();
 const router = useRouter();
-let data;
+
+let data = reactive({
+  step: 1,
+});
 
 let form = reactive({
   email: "",
@@ -155,7 +159,7 @@ async function Submit() {
     .then((res) => {
       console.log(res);
       if (res.status === 200) {
-        attempt.value = true;
+        data.step = 2;
       }
     })
     .catch((err) => {
@@ -183,13 +187,6 @@ async function sendCode() {
       console.log(err);
     });
 }
-
-onMounted(() => {
-  // self.$axios.get("user").then((res) => {
-  //   console.log(res);
-  //   data = res.data;
-  // });
-});
 </script>
 
 <style>

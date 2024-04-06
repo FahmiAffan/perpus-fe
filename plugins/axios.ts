@@ -1,7 +1,7 @@
 import axios from "axios"
 
+
 export default defineNuxtPlugin(nuxtApp => {
-    let app = useNuxtApp()
     const config = useRuntimeConfig();
     let axiosConfig = axios.create({
         baseURL: config.public.API_BASE_URL,
@@ -10,6 +10,7 @@ export default defineNuxtPlugin(nuxtApp => {
             'Content-Type': 'application/json',
         },
         withCredentials: true,
+        withXSRFToken: true,
     });
     axiosConfig.interceptors.request.use(function (response) {
         let token = useCookie('token');
@@ -23,12 +24,12 @@ export default defineNuxtPlugin(nuxtApp => {
 
     axiosConfig.interceptors.response.use(function (response) {
         if (response) {
-            app.$toast.success(response.data.message)
+            
         }
         return response;
     }, function (error) {
         if (error) {
-            app.$toast.error(error.response.data.message);
+
         }
         // return error
         return Promise.reject(error);
