@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast />
     <nuxt-page>
       <router-view />
     </nuxt-page>
@@ -10,5 +11,5 @@
 </script>
 
 <style>
-@import url('~/assets/css/main.css');
+@import url("~/assets/css/main.css");
 </style>

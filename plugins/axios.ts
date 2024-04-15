@@ -1,4 +1,5 @@
 import axios from "axios"
+import Toast from 'primevue/toast';
 
 
 export default defineNuxtPlugin(nuxtApp => {
@@ -24,7 +25,8 @@ export default defineNuxtPlugin(nuxtApp => {
 
     axiosConfig.interceptors.response.use(function (response) {
         if (response) {
-            
+            useNuxtApp().$toast.add({ severity: "success", summary: 'Success', detail: response.data.msg, life: 3000 })
+            console.log(response)
         }
         return response;
     }, function (error) {

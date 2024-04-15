@@ -1,5 +1,6 @@
 <template>
   <div class="flex h-[100vh] justify-center items-center futura">
+    <!-- <Toast /> -->
     <Card class="w-[414px]" v-if="data.step == 1">
       <template #content>
         <h1
@@ -181,7 +182,6 @@ async function sendCode() {
       let token = useCookie("token");
       token.value = res.data.token;
       router.push({ path: "/" });
-      await self.$toast.success("login success");
     })
     .catch((err) => {
       console.log(err);
