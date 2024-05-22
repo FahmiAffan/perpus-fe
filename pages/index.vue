@@ -27,5 +27,4 @@ onMounted(() => {});
 let submitBtn = () => {};
 </script>
 
-<style>
-</style>
+<style></style>
