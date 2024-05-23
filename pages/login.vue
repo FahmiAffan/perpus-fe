@@ -1,20 +1,30 @@
 <template>
   <div class="flex h-[100vh] justify-center items-center Inter">
     <!-- <Toast /> -->
-    <Card class="w-[414px]">
+    <Card class="w-[414px] rounded-xl">
       <template #content>
         <h1 class="text-[24px] text-[#000000] font-bold">Login</h1>
         <form @submit.prevent="Submit()" class="flex flex-col">
-          <label for="email" class="text-[#000000] font-semibold text-[12px]"
+          <label for="nik" class="text-[#000000] font-semibold text-[12px]"
             >NIK</label
           >
-          <InputText
+          <!-- <InputText
             variant="filled"
             type="number"
             class="mb-[14px]"
             v-model="form.nik"
             placeholder="123456789"
             id="email"
+          /> -->
+          <InputNumber
+            v-model="form.nik"
+            class="mb-[14px]"
+            variant="filled"
+            :useGrouping="false"
+            inputId="withoutgrouping"
+            id="nik"
+            min="0"
+            placeholder="123456789"
           />
           <label for="password" class="text-[#000000] font-semibold text-[12px]"
             >Password</label
@@ -42,10 +52,8 @@
             </div>
           </div>
 
-          <Button type="submit">
-            <center>
-              <h1 class="font-bold">Log In</h1>
-            </center>
+          <Button type="submit" class="flex justify-center">
+            <h1 class="font-bold">Log In</h1>
           </Button>
         </form>
       </template>
@@ -60,7 +68,7 @@ const self = useNuxtApp();
 const router = useRouter();
 
 let form = reactive({
-  nik: "",
+  nik: null,
   password: "",
   checked: "",
 });
@@ -102,6 +110,9 @@ async function Submit() {
 </script>
 
 <style>
+body {
+  background-color: #f3f3f3;
+}
 .inter {
   font-family: "Inter", sans-serif;
 }

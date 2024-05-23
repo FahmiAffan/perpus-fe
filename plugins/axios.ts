@@ -39,7 +39,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       return response;
     },
     function (error) {
-      if (error) {
+      if (error.response == 401) {
+        localStorage.removeItem("token");
       }
       // return error
       return Promise.reject(error);
