@@ -34,20 +34,41 @@
     >
       <template v-slot:body>
         <div class="flex flex-col">
-          <label for="nik">Nik</label>
-          <InputNumber class="h-[39px]" id="nik"></InputNumber>
+          <div class="flex flex-col py-2">
+            <label class="text-[14px] font-semibold" for="nik">Nik</label>
+            <InputNumber
+              :useGrouping="false"
+              class="h-[39px]"
+              id="nik"
+            ></InputNumber>
+          </div>
 
-          <label for="nama">Nama Pengguna</label>
-          <InputText class="h-[39px]" id="nama"></InputText>
+          <div class="flex flex-col py-2">
+            <label class="text-[14px] font-semibold" for="nama"
+              >Nama Pengguna</label
+            >
+            <InputText class="h-[39px]" id="nama"></InputText>
+          </div>
 
-          <label for="password">Password</label>
-          <InputText class="h-[39px]" id="password"></InputText>
+          <div class="flex flex-col py-2">
+            <label class="text-[14px] font-semibold" for="password"
+              >Password</label
+            >
+            <Password :feedback="false" inputClass="w-full" toggleMask class="w-full h-[39px]" id="password"></Password>
+          </div>
 
-          <label for="telp">Namor Telpon</label>
-          <InputText class="h-[39px]" id="telp"></InputText>
-          
-          <label for="telp">Namor Telpon</label>
-          <InputText class="h-[39px]" id="telp"></InputText>
+          <div class="flex flex-col py-2">
+            <label class="text-[14px] font-semibold" for="telp"
+              >Namor Telpon</label
+            >
+            <InputNumber class="h-[39px]" id="telp" :useGrouping="false"></InputNumber>
+          </div>
+          <div class="flex flex-col py-2">
+            <label class="text-[14px] font-semibold" for="telp"
+              >Foto Profil</label
+            >
+            <InputFile></InputFile>
+          </div>
         </div>
       </template>
     </DialogForm>

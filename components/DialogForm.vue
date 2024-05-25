@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 v-if="dialog">haloo</h1>
     <Dialog :visible="dialog" :closable="false" style="width: 572px" modal>
       <template #header>
         <div class="flex items-center w-full">
