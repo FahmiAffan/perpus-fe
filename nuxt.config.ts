@@ -58,9 +58,9 @@ export default defineNuxtConfig({
     // options: {
     //   unstyled: true,
     // },
+
     cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
     importPT: { as: "Tailwind", from: "primevue/passthrough/tailwind" },
-    // cssLayerOrder: "tailwind-base, primevue, tailwind-utilities",
   },
   postcss: {
     plugins: {

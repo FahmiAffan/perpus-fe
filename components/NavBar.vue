@@ -10,7 +10,7 @@
           <NuxtLink to="/about">
             <p class="text-[18px]">ABOUT</p>
           </NuxtLink>
-          <NuxtLink to="/book">
+          <NuxtLink to="/buku">
             <p class="text-[18px]">BOOK</p>
           </NuxtLink>
         </div>
@@ -28,7 +28,7 @@
         <Icon
           name="mdi:account-circle"
           size="36px"
-          class="text-[#64748B] fixed"
+          class="text-[#64748B] relative"
           @mouseover="dialog = true"
         >
         </Icon>

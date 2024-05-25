@@ -1,9 +1,11 @@
 <template>
   <div>
     <Toast />
-    <nuxt-page>
-      <router-view />
-    </nuxt-page>
+    <NuxtLayout>
+      <nuxt-page>
+        <router-view />
+      </nuxt-page>
+    </NuxtLayout>
   </div>
 </template>
 
@@ -22,7 +24,7 @@
   border-color: #6bb7be;
 }
 .p-button:hover {
-  background-color: #63C9BE;
-  border-color: #71DAB3;
+  background-color: #63c9be;
+  border-color: #71dab3;
 }
 </style>

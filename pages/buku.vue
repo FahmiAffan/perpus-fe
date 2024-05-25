@@ -1,6 +1,7 @@
 <template>
   <div>
     <NavBar></NavBar>
+    {{ datas }}
     <div class="container mx-auto">
       <div class="grid grid-cols-4 gap-16">
         <div
@@ -27,11 +28,9 @@
 </template>
 
 <script setup>
-import NavBar from "~/components/NavBar.vue";
-
 let self = useNuxtApp();
 
-let data = [
+let data = ref([
   {
     id_buku: 1,
     judul_buku: "Harry Potter",
@@ -92,12 +91,17 @@ let data = [
     created_at: "2024-05-19T14:51:36.000000Z",
     updated_at: "2024-05-19T14:51:36.000000Z",
   },
-];
+]);
+
+var datas = ref(null);
 
 onMounted(async () => {
-  self.$axios.get("/buku").then((res) => {
-    res.data;
-  });
+  try {
+    const res = await self.$axios.get("/buku");
+    datas = res.data;
+  } catch (error) {
+    console.log(error);
+  }
 });
 </script>
 
