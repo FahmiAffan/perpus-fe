@@ -4,7 +4,7 @@
       <template #header>
         <div class="flex items-center w-full">
           <div class="flex grow-0">
-            <h1 class="text-[32px] font-bold">{{ header }}</h1>
+            <h1 class="text-[32px] text-black font-bold">{{ header }}</h1>
             <h1>{{ subtitle }}</h1>
           </div>
           <div class="grow text-right">
@@ -17,12 +17,14 @@
           </div>
         </div>
       </template>
-      <slot name="body"></slot>
+      <form id="form" ref="form">
+        <slot name="body"></slot>
+      </form>
       <div class="flex justify-end">
         <Button
           type="button"
           label="Tambah"
-          @click="increment"
+          @click="resetForm"
           class="w-[83px] h-[39px] flex justify-center"
           >Tambah</Button
         >
@@ -58,6 +60,12 @@ let emits = defineEmits(["update:dialog", "submit:form"]);
 
 let isOpen = ref(props.dialog);
 let watchForm = ref(props.formBody);
+
+const form = ref();
+async function resetForm() {
+  // form.value.reset();
+  emits("submit:form")
+}
 
 function increment() {
   emits("update:dialog", isOpen.value);

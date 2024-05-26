@@ -1,9 +1,6 @@
 <template>
   <div class="w-full">
     <div class="flex">
-      <div class="grow-0">
-        <InputText placeholder="Search" class="h-[39px]"></InputText>
-      </div>
       <div class="grow text-right">
         <Button
           class="w-[219px] h-[39px] flex justify-center"
@@ -14,14 +11,21 @@
     </div>
     <Table :header="header" :data="data" :color="color">
       <template v-slot:body>
-        <tr v-for="i in data" :key="i" class="bg-white-500 hover:bg-[#F7F9FA]">
-          <td class="border-y px-4 py-">{{ i.nama }}</td>
-          <td class="border-y px-4 py-2">{{ i }}</td>
-          <td class="border-y px-4 py-2">{{ i }}</td>
-          <td>
-            <Button rounded icon style="background-color: white; border: white">
-              <Icon name="mdi:dots-vertical" class="text-black"></Icon>
-            </Button>
+        <tr
+          v-for="(i, index) in data"
+          :key="i"
+          class="bg-white-500 hover:bg-[#F7F9FA]"
+        >
+          <td class="border-y px-4 py-4">{{ (index += 1) }}</td>
+          <td class="border-y px-4 py-4">{{ i.username }}</td>
+          <td class="border-y px-4 py-4">{{ i.nik }}</td>
+          <td class="border-y px-4 py-4">{{ i.telp }}</td>
+          <td class="border-y px-4 py-4">
+            <Icon
+              name="mdi:dots-vertical"
+              class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
+              size="30"
+            ></Icon>
           </td>
         </tr>
       </template>
@@ -31,12 +35,13 @@
       :dialog="dialog"
       @update:dialog="openDialog"
       header="Tambah Pengguna"
+      @submit:form="submit"
     >
       <template v-slot:body>
         <div class="flex flex-col">
           <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="nik">Nik</label>
-            <InputNumber v-model="form.nik"></InputNumber>
+            <InputNumber v-model="form.nik" :useGrouping="false"></InputNumber>
           </div>
 
           <div class="flex flex-col py-2">
@@ -120,35 +125,48 @@ let dialog = ref(false);
 
 const header = ["No", "Nama", "NIK", "Telp", "Aksi"];
 
-// const form = ref({
-//   username: String,
-//   nik: Number,
-//   password: String,
-//   telp: String,
-// });
-
-const form = ref({
+const form = reactive({
   username: "",
   nik: 0,
   password: "",
   telp: "",
 });
 
-const data = reactive([
-  {
-    // nama : {
-    //   type: String,
-    //   value: 'John Dow',
-    // }
-    nama: "John Doe",
-  },
-]);
+const data = ref(null);
 
 function openDialog(val) {
-  console.log(val, dialog);
   dialog.value = val;
 }
 
+function submit() {
+  self.$axios.post("/users", {
+    nik: form.nik,
+    password: form.password,
+    username: form.username,
+    role: "petugas",
+    telp: form.telp,
+  }).finally(() => {
+    getData()
+    openDialog()
+  });
+}
+
+async function getData() {
+  try {
+    const response = await self.$axios.get("/users");
+    data.value = response.data.data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  } finally {
+    dataFetched = true;
+  }
+}
+
+onMounted(async () => {
+  await getData();
+
+  await nextTick();
+});
 definePageMeta({
   layout: "petugas",
 });

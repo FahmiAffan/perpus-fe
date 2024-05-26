@@ -40,10 +40,17 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
     function (error) {
       if (error.response == 401) {
-        localStorage.removeItem("token");
+        return localStorage.removeItem("token"); 
       }
+
+      return useNuxtApp().$toast.add({
+        severity: "error",
+        summary: "Error",
+        detail: error.response.data.msg,
+        life: 3000,
+      });
       // return error
-      return Promise.reject(error);
+      // return Promise.reject(error);
     }
   );
 

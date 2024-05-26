@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col w-[288px] pt-[72px] p-8 h-screen"
+    class="flex flex-col w-[288px] pt-[72px] p-8 h-screen bg-white"
     style="border-right: 2px solid #e5eaef"
   >
     <div class="grow-0">
