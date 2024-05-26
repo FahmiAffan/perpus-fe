@@ -36,39 +36,46 @@
         <div class="flex flex-col">
           <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="nik">Nik</label>
-            <InputNumber
-              :useGrouping="false"
-              class="h-[39px]"
-              id="nik"
-            ></InputNumber>
+            <InputNumber v-model="form.nik"></InputNumber>
           </div>
 
           <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="nama"
               >Nama Pengguna</label
             >
-            <InputText class="h-[39px]" id="nama"></InputText>
+            <InputText
+              class="h-[39px]"
+              id="nama"
+              v-model="form.username"
+            ></InputText>
           </div>
 
           <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="password"
-              >Password</label
+              >Kata Sandi</label
             >
-            <Password :feedback="false" inputClass="w-full" toggleMask class="w-full h-[39px]" id="password"></Password>
+            <Password
+              v-model="form.password"
+              :feedback="false"
+              inputClass="w-full"
+              toggleMask
+              class="w-full h-[39px]"
+              id="password"
+            ></Password>
           </div>
 
           <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="telp"
-              >Namor Telpon</label
+              >Nomor Telpon</label
             >
-            <InputNumber class="h-[39px]" id="telp" :useGrouping="false"></InputNumber>
+            <InputNomor v-model="form.telp" :value="form.telp"></InputNomor>
           </div>
-          <div class="flex flex-col py-2">
+          <!-- <div class="flex flex-col py-2">
             <label class="text-[14px] font-semibold" for="telp"
               >Foto Profil</label
             >
-            <InputFile></InputFile>
-          </div>
+            <InputFile label="Upload Foto"></InputFile>
+          </div> -->
         </div>
       </template>
     </DialogForm>
@@ -111,7 +118,21 @@ const color = "#F7F9FA";
 
 let dialog = ref(false);
 
-const header = ["No", "Nama", "NIK", "Telp", "Role", "Foto", "Aksi"];
+const header = ["No", "Nama", "NIK", "Telp", "Aksi"];
+
+// const form = ref({
+//   username: String,
+//   nik: Number,
+//   password: String,
+//   telp: String,
+// });
+
+const form = ref({
+  username: "",
+  nik: 0,
+  password: "",
+  telp: "",
+});
 
 const data = reactive([
   {
