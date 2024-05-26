@@ -24,31 +24,11 @@
             <td class="border-y px-4 py-4">
               <div>
                 <Icon
-                  name="mdi:dots-vertical"
+                  name="mdi:trash"
                   class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
                   size="30"
-                  @click="menu = !menu"
+                  @click="deleteData(i.id_buku)"
                 ></Icon>
-              </div>
-              <div
-                class="rounded-lg bg-white border-gray-200 w-[164px] drop-shadow"
-                v-if="menu"
-              >
-                <div
-                  class="flex items-center p-3 hover:bg-gray-100 cursor-pointer"
-                  v-for="i in items"
-                  :key="i"
-                  @click="i.function"
-                >
-                  <Icon
-                    :name="i.iconName"
-                    class="mr-5 text-[#64748B]"
-                    size="24px"
-                  ></Icon>
-                  <p class="text-[16px] font-semibold text-[#64748B]">
-                    {{ i.label }}
-                  </p>
-                </div>
               </div>
             </td>
           </tr>
@@ -204,6 +184,17 @@ async function getData() {
     console.error("Error fetching posts:", error);
   } finally {
     dataFetched = true;
+  }
+}
+
+async function deleteData(id) {
+  try {
+    const response = await self.$axios.delete("/buku/" + id);
+    console.log(response);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  } finally {
+    getData();
   }
 }
 

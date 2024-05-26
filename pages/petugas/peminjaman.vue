@@ -25,11 +25,20 @@
           <td class="border-y px-4 py-4">{{ i.tgl_pengembalian }}</td>
           <td class="border-y px-4 py-4">{{ i.status_peminjaman }}</td>
           <td class="border-y px-4 py-4">
-            <Icon
-              name="mdi:dots-vertical"
-              class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
-              size="30"
-            ></Icon>
+            <div>
+              <Icon
+                name="tabler:login"
+                class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
+                size="30"
+                @click="updateStatus(i)"
+              ></Icon>
+              <Icon
+                name="mdi:trash"
+                class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
+                size="30"
+                @click="deleteData(i.id_peminjaman)"
+              ></Icon>
+            </div>
           </td>
         </tr>
       </template>
@@ -102,7 +111,6 @@
               v-model="form.tgl_pinjam"
               inline
               dateFormat="dd/mm/yy"
-              showWeek
             >
               <template #footer>
                 <div class="flex justify-end">
@@ -182,7 +190,16 @@ const dataFetched = ref(false);
 
 const buku = ref(null);
 
-const header = ref(["No", "Nama Siswa" , "NIK" , "Judul Buku", "Tgl Pinjam" , "Tgl Pengembalian", "Status Peminjaman", "Aksi"]);
+const header = ref([
+  "No",
+  "Nama Siswa",
+  "NIK",
+  "Judul Buku",
+  "Tgl Pinjam",
+  "Tgl Pengembalian",
+  "Status Peminjaman",
+  "Aksi",
+]);
 
 function openDialog(val) {
   console.log(val, dialog);
@@ -196,6 +213,16 @@ async function getBuku() {
   } catch (error) {
     console.error("Error fetching posts:", error);
   } finally {
+  }
+}
+
+async function deleteData(id) {
+  try {
+    const response = await self.$axios.delete("/peminjaman/" + id);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  } finally {
+    getData();
   }
 }
 
@@ -222,15 +249,18 @@ function submit() {
     })
     .finally(() => {
       getData();
+      openDialog();
     });
+}
 
-  // "tgl_pinjam": "2024-05-18",
-  // "tgl_pengembalian": "2024-05-18",
-  // "status_peminjaman": "booked",
-  // // "id_siswa": 1,
-  // "nik": "442131214",
-  // "nama_siswa": "fahmi affan",
-  // "id_buku": 1
+function updateStatus(i) {
+  self.$axios
+    .put("/updateStatus/" + i.id_peminjaman, {
+      status_peminjaman: "returned",
+    })
+    .finally(() => {
+      getData();
+    });
 }
 
 onMounted(async () => {
