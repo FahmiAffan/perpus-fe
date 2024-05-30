@@ -15,15 +15,23 @@
         </div>
       </div>
     </div>
-    <div
-      class="flex flex-col justify-end h-full grow-1"
-    >
-      <Button class="h-[36px] flex justify-center">Sign Out</Button>
+    <div class="flex flex-col justify-end h-full grow-1">
+      <Button class="h-[36px] flex justify-center" @click="SignOut()"
+        >Sign Out</Button
+      >
     </div>
   </div>
 </template>
 
 <script setup>
+const self = useNuxtApp();
+async function SignOut() {
+  self.$axios.post("/logout").finally(() => {
+    self.$locally.removeItem("token");
+    self.$router.push({ path: "/login" });
+  });
+}
+
 const item = ref([
   {
     icon: "ri:dashboard-line",

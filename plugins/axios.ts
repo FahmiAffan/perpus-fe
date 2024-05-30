@@ -35,7 +35,6 @@ export default defineNuxtPlugin((nuxtApp) => {
           life: 3000,
         });
       }
-      console.log(response);
       return response;
     },
     function (error) {

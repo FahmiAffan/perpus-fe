@@ -1,9 +1,10 @@
 <template>
   <div class="flex">
     <SidebarAdmin class="grow-0"></SidebarAdmin>
-    <slot class="grow" />
+    <div class="grow p-5">
+      <slot />
+    </div>
   </div>
 </template>
-
 
 <script setup></script>
