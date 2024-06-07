@@ -220,7 +220,7 @@ async function deleteData(id) {
   try {
     const response = await self.$axios.delete("/peminjaman/" + id);
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.log("Error fetching posts:", error);
   } finally {
     getData();
   }
@@ -231,7 +231,7 @@ async function getData() {
     const response = await self.$axios.get("/peminjaman");
     data.value = response.data.data;
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.log("Error fetching posts:", error);
   } finally {
     dataFetched = true;
   }

@@ -48,8 +48,6 @@ export default defineNuxtPlugin((nuxtApp) => {
         detail: error.response.data.msg,
         life: 3000,
       });
-      // return error
-      // return Promise.reject(error);
     }
   );
 
