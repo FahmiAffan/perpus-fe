@@ -45,9 +45,12 @@
       @update:dialog="openDialog"
       header="Tambah Buku"
       @submit:form="submit"
+      @refresh-data="getData"
       :schema="schema"
       :form="formRef"
+      :formData="formData"
       api="buku"
+      tipe="edit"
     >
       <template v-slot:body>
         <div class="flex flex-col">
@@ -80,41 +83,60 @@
                 v-model="form.qty"
               ></InputNomor>
             </div>
-            <!-- <div class="flex flex-col py-2">
-              <label class="text-[14px] font-semibold" for="nama"
-                >Penerbit</label
-              >
-              <InputText
-                class="h-[39px]"
-                id="nama"
-                v-model="form.penerbit"
-                placeholder="Isi Penerbit Buku"
-              ></InputText>
-            </div>
-
             <div class="flex flex-col py-2">
-              <label class="text-[14px] font-semibold" for="nama"
-                >Deskripsi</label
-              >
-              <InputText
-                class="h-[39px]"
-                id="nama"
-                v-model="form.deskripsi"
-                placeholder="Dekripsi"
-              ></InputText>
-            </div> -->
-
-            <!-- <div class="flex flex-col py-2">
-              <label class="text-[14px] font-semibold" for="nama">Tipe</label>
-              <Dropdown
+              <InputString
                 v-model="form.tipe"
                 :options="tipe_buku"
-                optionLabel="tipe"
-                placeholder="Pilih Tipe Buku"
-                class="w-full md:w-14rem h-[39px] flex items-center border-[#bfbfbf] drop-shadow-none"
+                name="tipe"
+                label="Tipe Buku"
               />
-            </div> -->
-            
+            </div>
+          </div>
+        </div>
+      </template>
+    </DialogForm>
+
+    <DialogForm
+      :dialog="dialogEdit"
+      @update:dialog="openDialog2"
+      header="Tambah Buku"
+      @submit:form="submit"
+      :schema="schema"
+      :form="formRef"
+      api="buku"
+      tipe="edit"
+    >
+      <template v-slot:body>
+        <div class="flex flex-col">
+          <div class="flex flex-col py-2">
+            <div class="flex flex-col py-2">
+              <InputString
+                name="judul_buku"
+                label="Judul Buku"
+                v-model="formEdit.judul_buku"
+              ></InputString>
+            </div>
+            <div class="flex flex-col py-2">
+              <InputString
+                name="deskripsi"
+                label="Deskripsi"
+                v-model="form.deskripsi"
+              ></InputString>
+            </div>
+            <div class="flex flex-col py-2">
+              <InputString
+                name="penerbit"
+                label="penerbit"
+                v-model="form.penerbit"
+              ></InputString>
+            </div>
+            <div class="flex flex-col py-2">
+              <InputNomor
+                name="qty"
+                label="Quantity Buku"
+                v-model="form.qty"
+              ></InputNomor>
+            </div>
             <div class="flex flex-col py-2">
               <InputString
                 v-model="form.tipe"
@@ -135,6 +157,7 @@ import * as zod from "zod";
 
 let self = useNuxtApp();
 let dialog = ref(false);
+let dialogEdit = ref(false);
 let menu = ref(false);
 
 const header = ["No", "Nama", "Penerbit", "Aksi"];
@@ -176,6 +199,13 @@ const form = reactive({
   qty: 1,
 });
 
+const formBody = [
+  {
+    label: "",
+    value: "",
+  },
+];
+
 const item = [
   {
     iconName: "mdi:eye-outline",
@@ -194,6 +224,10 @@ const item = [
 ];
 
 function openDialog(val) {
+  dialog.value = val;
+}
+
+function openDialog2(val) {
   dialog.value = val;
 }
 

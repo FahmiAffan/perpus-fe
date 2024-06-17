@@ -17,6 +17,7 @@
           </div>
         </div>
       </template>
+
       <Form
         ref="formRef"
         :validation-schema="validationSchema"
@@ -57,18 +58,21 @@ let props = defineProps({
     type: String,
     default: "",
   },
+  tipe: {
+    type: String,
+    default: "",
+  },
   schema: Object,
 });
 
-let emits = defineEmits(["update:dialog", "submit:form"]);
+let emits = defineEmits(["update:dialog", "refresh-data"]);
 
 const formRef = ref(null);
 
 let isOpen = ref(props.dialog);
 
-async function resetForm() {
-  // form.value.reset();
-  emits("submit:form");
+async function refreshData() {
+  emits("refresh-data");
 }
 
 function increment() {
@@ -80,9 +84,12 @@ function increment() {
 // });
 
 function submit(value) {
-  postData(`/${props.api}`, value).then((res) => {
+  console.log(props.tipe);
+  postData(`/${props.api}`, value).then(async (res) => {
     console.log(res);
-    formRef.value.resetForm();
+    await formRef.value.resetForm();
+    increment();
+    refreshData();
   });
 }
 
