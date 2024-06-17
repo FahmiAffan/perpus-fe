@@ -17,24 +17,28 @@
           </div>
         </div>
       </template>
-      <form id="form" ref="form">
+      <Form
+        ref="formRef"
+        :validation-schema="validationSchema"
+        @submit="submit"
+      >
         <slot name="body"></slot>
-      </form>
-      <div class="flex justify-end">
-        <Button
-          type="button"
-          label="Tambah"
-          @click="resetForm"
-          class="w-[83px] h-[39px] flex justify-center"
-          >Tambah</Button
-        >
-      </div>
+        <div class="flex justify-end">
+          <Button
+            type="submit"
+            label="Tambah"
+            class="w-[83px] h-[39px] flex justify-center"
+            >Tambah</Button
+          >
+        </div>
+      </Form>
     </Dialog>
   </div>
 </template>
 
 <script setup>
 let self = useNuxtApp();
+import * as zod from "zod";
 
 let props = defineProps({
   dialog: {
@@ -53,31 +57,34 @@ let props = defineProps({
     type: String,
     default: "",
   },
-  formBody: Array,
+  schema: Object,
 });
 
 let emits = defineEmits(["update:dialog", "submit:form"]);
 
-let isOpen = ref(props.dialog);
-let watchForm = ref(props.formBody);
+const formRef = ref(null);
 
-const form = ref();
+let isOpen = ref(props.dialog);
+
 async function resetForm() {
   // form.value.reset();
-  emits("submit:form")
+  emits("submit:form");
 }
 
 function increment() {
   emits("update:dialog", isOpen.value);
 }
 
-let formData = new FormData();
-
 // let datas = watchForm.value.map((x) => {
 //   return x;
 // });
 
-function submit() {
-  self.$axios.post("/", formData);
+function submit(value) {
+  postData(`/${props.api}`, value).then((res) => {
+    console.log(res);
+    formRef.value.resetForm();
+  });
 }
+
+const validationSchema = toTypedSchema(zod.object(props.schema));
 </script>

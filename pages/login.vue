@@ -66,6 +66,7 @@
 const config = useRuntimeConfig();
 const self = useNuxtApp();
 const router = useRouter();
+const data = state();
 
 let form = reactive({
   nik: null,
@@ -78,12 +79,17 @@ async function test() {
 }
 
 async function Submit() {
-  self.$axios
-    .post("/login", {
-      nik: form.nik,
-      password: form.password,
-    })
+  // self.$axios
+  //   .post("/login", {
+  //     nik: form.nik,
+  //     password: form.password,
+  //   })
+  postData("/login", {
+    nik: form.nik,
+    password: form.password,
+  })
     .then((res) => {
+      data.user = res.data
       if (res.data.user.role == "petugas") {
         localStorage.setItem("token", res.data.accessToken);
         router.push({ path: "/petugas" });

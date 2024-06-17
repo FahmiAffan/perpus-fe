@@ -45,22 +45,42 @@
       @update:dialog="openDialog"
       header="Tambah Buku"
       @submit:form="submit"
+      :schema="schema"
+      :form="formRef"
+      api="buku"
     >
       <template v-slot:body>
         <div class="flex flex-col">
           <div class="flex flex-col py-2">
             <div class="flex flex-col py-2">
-              <label class="text-[14px] font-semibold" for="nama"
-                >Judul Buku</label
-              >
-              <InputText
-                class="h-[39px]"
-                id="nama"
+              <InputString
+                name="judul_buku"
+                label="Judul Buku"
                 v-model="form.judul_buku"
-                placeholder="Masukkan Judul Buku"
-              ></InputText>
+              ></InputString>
             </div>
             <div class="flex flex-col py-2">
+              <InputString
+                name="deskripsi"
+                label="Deskripsi"
+                v-model="form.deskripsi"
+              ></InputString>
+            </div>
+            <div class="flex flex-col py-2">
+              <InputString
+                name="penerbit"
+                label="penerbit"
+                v-model="form.penerbit"
+              ></InputString>
+            </div>
+            <div class="flex flex-col py-2">
+              <InputNomor
+                name="qty"
+                label="Quantity Buku"
+                v-model="form.qty"
+              ></InputNomor>
+            </div>
+            <!-- <div class="flex flex-col py-2">
               <label class="text-[14px] font-semibold" for="nama"
                 >Penerbit</label
               >
@@ -82,9 +102,9 @@
                 v-model="form.deskripsi"
                 placeholder="Dekripsi"
               ></InputText>
-            </div>
+            </div> -->
 
-            <div class="flex flex-col py-2">
+            <!-- <div class="flex flex-col py-2">
               <label class="text-[14px] font-semibold" for="nama">Tipe</label>
               <Dropdown
                 v-model="form.tipe"
@@ -92,6 +112,15 @@
                 optionLabel="tipe"
                 placeholder="Pilih Tipe Buku"
                 class="w-full md:w-14rem h-[39px] flex items-center border-[#bfbfbf] drop-shadow-none"
+              />
+            </div> -->
+            
+            <div class="flex flex-col py-2">
+              <InputString
+                v-model="form.tipe"
+                :options="tipe_buku"
+                name="tipe"
+                label="Tipe Buku"
               />
             </div>
           </div>
@@ -102,6 +131,8 @@
 </template>
 
 <script setup>
+import * as zod from "zod";
+
 let self = useNuxtApp();
 let dialog = ref(false);
 let menu = ref(false);
@@ -127,11 +158,22 @@ const tipe_buku = reactive([
   },
 ]);
 
+const schema = {
+  judul_buku: zod.string().min(1, { message: "Harus Diisi" }),
+  penerbit: zod.string().min(1, { message: "Harus Diisi" }),
+  deskripsi: zod.string().min(1, { message: "Harus Diisi" }),
+  tipe: zod.string().min(1, { message: "Harus Diisi" }),
+  qty: zod
+    .number({ message: "Harus berupa angka" })
+    .min(1, { message: "Harus Diisi" }),
+};
+
 const form = reactive({
   judul_buku: "",
   penerbit: "",
   deskripsi: "",
-  tipe: "",
+  tipe: "book",
+  qty: 1,
 });
 
 const item = [
@@ -150,10 +192,6 @@ const item = [
     },
   },
 ];
-
-function openMenu(val) {
-  menu.value = val;
-}
 
 function openDialog(val) {
   dialog.value = val;

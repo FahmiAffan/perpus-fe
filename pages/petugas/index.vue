@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <SidebarAdmin></SidebarAdmin>
-    </div>
+  <div>
+    <SidebarAdmin></SidebarAdmin>
+  </div>
 </template>
 
 <script></script>

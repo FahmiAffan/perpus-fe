@@ -1,5 +1,5 @@
-export function getData(url) {
-  useNuxtApp()
+export async function getData(url) {
+  return await useNuxtApp()
     .$axios.get(url)
     .then((res) => {
       return res;
@@ -12,8 +12,8 @@ export function getData(url) {
     });
 }
 
-export function postData(url, req) {
-  useNuxtApp()
+export async function postData(url, req) {
+  return useNuxtApp()
     .$axios.post(url, req)
     .then((res) => {
       return res;
@@ -23,5 +23,16 @@ export function postData(url, req) {
     })
     .finally((res) => {
       return res;
+    });
+}
+
+export async function updateData(url, id, req) {
+  return useNuxtApp()
+    .$axios.put(url + id, req)
+    .then((res) => {
+      return res;
+    })
+    .catch((err) => {
+      return err;
     });
 }

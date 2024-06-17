@@ -1,6 +1,7 @@
 <template>
   <div
-    class="cursor-pointer flex p-2 w-full border-[1px] h-[39px] rounded-lg text-[#64748b] border-[#bfbfbf]"
+    class="cursor-pointer relative flex p-2 w-full border-[1px] h-[39px] rounded-lg text-[#64748b] border-[#bfbfbf]"
+    @click="openDialog"
   >
     <div class="flex grow-0 w-full">
       <Icon name="ic:baseline-calendar-month" class="mr-2"></Icon>
@@ -11,6 +12,22 @@
     </div>
     <slot name="body" />
   </div>
+  <Calendar
+    inline
+    dateFormat="dd/mm/yy"
+    showWeek
+    v-if="dialog"
+    class="absolute w-full"
+    v-model="values"
+    @date-select="handleInput"
+  >
+    <template #footer>
+      <div class="flex justify-end">
+        <Button size="small" @click="dialog = !dialog">Selesai</Button>
+      </div>
+    </template>
+  </Calendar>
+
   <!-- <input type="date" id="date" :value="props.value" v-on:input="handleInput" />
   <label
     for="date"
@@ -33,10 +50,13 @@ const props = defineProps({
   },
 });
 
-const dialog = ref(false);
+let values = ref();
 
-const openDialog = () => {
-  dialog = !dialog;
+let dialog = ref(true);
+
+let openDialog = () => {
+  // dialog = !dialog;
+  console.log("wawdea");
 };
 
 // const handleClick = () => {
@@ -46,7 +66,8 @@ const openDialog = () => {
 
 const emit = defineEmits(["update:modelValue"]);
 const handleInput = (event) => {
-  emit("update:modelValue", event.target.value);
+  // emit("update:modelValue", event.target.value);
+  console.log(event.target);
 };
 </script>
 

@@ -1,25 +1,21 @@
 import { defineStore } from "pinia";
 
-export const useStore = defineStore('character', {
-    state: () => ({
-        characters: [{
-            name: 'John Doe',
-            line: ''
-        }]
-    }),
-    getters: {
+export const useStore = defineStore("Store", {
+  state: () => ({
+    characters: [{}],
+    user: "",
+  }),
+  // getters: {
 
+  // },
+
+  actions: {
+    addCharacter(data: object) {
+      this.characters.push(data);
     },
-    actions: {
-        addCharacter(name: string, line: string) {
-            this.characters.push({
-                name,
-                line,
-            })
-        }
-    },
-})
+  },
+});
 
 if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useStore, import.meta.hot));
 }

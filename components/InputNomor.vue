@@ -1,11 +1,13 @@
 <template>
-  <input
+  <label :for="props.name" class="text-[14px] font-semibold">{{ label }}</label>
+  <Field
     type="number"
-    id="number"
+    :id="props.name"
+    :name="props.name"
     class="input p-2 w-full border-[1px] h-[39px] rounded-lg text-[#64748b] border-[#bfbfbf]"
-    :value="props.value"
-    v-on:input="handleInput"
+    v-model="model"
   />
+  <ErrorMessage :name="props.name" />
   <!-- @input="$emit('update:modelValue', $event.target?.value)" -->
 </template>
 
@@ -13,13 +15,14 @@
 const props = defineProps({
   value: {
     type: String,
+    default: 0,
   },
+  name: String,
+  label: String,
 });
 
-const emit = defineEmits(['update:modelValue']);
-const handleInput = (event) => {
-    emit('update:modelValue', event.target.value)
-};
+const model = defineModel();
+const components = defineComponent(model);
 </script>
 
 <style scoped>

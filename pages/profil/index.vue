@@ -11,6 +11,7 @@
 
 <script setup>
 const data = getData("buku");
+
 onMounted(() => {
   data;
 });

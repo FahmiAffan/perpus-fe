@@ -7,10 +7,23 @@
       <h1 class="text-[16px] font-bold">SMPN 1 PUJON</h1>
       <div class="pt-9">
         <h1 class="text-[14px] font-bold">HOME</h1>
-        <div class="grid gap-8 pt-6">
-          <NuxtLink v-for="i in item" :key="i" :to="i.link" class="flex">
-            <Icon :name="i.icon" size="24px" class="text-[#64748B]"></Icon>
-            <h1 class="text-[16px] text-[#64748B] pl-4">{{ i.title }}</h1>
+        <div class="grid gap-4 pt-6">
+          <NuxtLink
+            v-for="i in item"
+            :key="i"
+            :to="i.link"
+            class="flex p-2"
+            activeClass="foo"
+            v-slot="{ isActive }"
+          >
+            <Icon
+              :name="i.icon"
+              size="24px"
+              :class="isActive == true ? 'text-white' : 'text-[#64748B]'"
+            ></Icon>
+            <h1 :class="isActive == true ? 'text-white text-[16px] pl-4' : 'text-[#64748B] text-[16px] pl-4 '">
+              {{ i.title }}
+            </h1>
           </NuxtLink>
         </div>
       </div>
@@ -60,3 +73,9 @@ const item = ref([
   },
 ]);
 </script>
+<style scoped>
+.foo {
+  background-color: #5d87ff;
+  border-radius: 5px;
+}
+</style>

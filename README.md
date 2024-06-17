@@ -73,3 +73,6 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+Untuk Penggunaan Component Input Custom Text Anda harus menyertakan attribut v-model dan name agar input dapat berjalan

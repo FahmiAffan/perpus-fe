@@ -11,12 +11,12 @@ export default defineNuxtConfig({
       "@vee-validate/nuxt",
       {
         autoImports: true,
-        componentNames: {
-          Form: "VeeForm",
-          Field: "VeeField",
-          FieldArray: "VeeFieldArray",
-          ErrorMessage: "VeeErrorMessage",
-        },
+        // componentNames: {
+        //   Form: "VeeForm",
+        //   Field: "VeeField",
+        //   FieldArray: "VeeFieldArray",
+        //   ErrorMessage: "VeeErrorMessage",
+        // },
       },
     ],
   ],

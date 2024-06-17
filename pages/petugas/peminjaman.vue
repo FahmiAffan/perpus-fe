@@ -206,51 +206,57 @@ function openDialog(val) {
   dialog.value = val;
 }
 
-async function getBuku() {
-  try {
-    const response = await self.$axios.get("/buku");
-    buku.value = response.data.data;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-  } finally {
-  }
-}
+// async function getBuku() {
+//   try {
+//     const response = await self.$axios.get("/buku");
+//     buku.value = response.data.data;
+//   } catch (error) {
+//     console.error("Error fetching posts:", error);
+//   } finally {
+//   }
+// }
 
-async function deleteData(id) {
-  try {
-    const response = await self.$axios.delete("/peminjaman/" + id);
-  } catch (error) {
-    console.log("Error fetching posts:", error);
-  } finally {
-    getData();
-  }
-}
+const getBuku = getData("buku");
 
-async function getData() {
-  try {
-    const response = await self.$axios.get("/peminjaman");
-    data.value = response.data.data;
-  } catch (error) {
-    console.log("Error fetching posts:", error);
-  } finally {
-    dataFetched = true;
-  }
-}
+// async function deleteData(id) {
+//   try {
+//     const response = await self.$axios.delete("/peminjaman/" + id);
+//   } catch (error) {
+//     console.log("Error fetching posts:", error);
+//   } finally {
+//     getData();
+//   }
+// }
+
+// async function getData() {
+//   try {
+//     const response = await self.$axios.get("/peminjaman");
+//     data.value = response.data.data;
+//   } catch (error) {
+//     console.log("Error fetching posts:", error);
+//   } finally {
+//     dataFetched = true;
+//   }
+// }
 
 function submit() {
-  self.$axios
-    .post("/peminjaman", {
-      tgl_pinjam: form.tgl_pinjam,
-      tgl_pengembalian: form.tgl_pengembalian,
-      nik: form.nik,
-      nama_siswa: form.nama_siswa,
-      id_buku: form?.id_buku?.id_buku,
-      status_peminjaman: "booked",
-    })
-    .finally(() => {
-      getData();
-      openDialog();
-    });
+  // self.$axios
+  //   .post("/peminjaman", {
+  //     tgl_pinjam: form.tgl_pinjam,
+  //     tgl_pengembalian: form.tgl_pengembalian,
+  //     nik: form.nik,
+  //     nama_siswa: form.nama_siswa,
+  //     id_buku: form?.id_buku?.id_buku,
+  //     status_peminjaman: "booked",
+  //   })
+  //   .finally(() => {
+  //     getData();
+  //     openDialog();
+  //   });
+
+  getData("/peminjaman").then((res) => {
+    console.log(res);
+  });
 }
 
 function updateStatus(i) {
@@ -264,11 +270,7 @@ function updateStatus(i) {
 }
 
 onMounted(async () => {
-  await getBuku();
-
-  await getData();
-
-  await nextTick();
+  getBuku;
 });
 
 definePageMeta({

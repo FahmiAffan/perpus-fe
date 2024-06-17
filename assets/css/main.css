@@ -45,3 +45,15 @@
   --primary-highlight-inverse: var(--surface-0);
   --primary-highlight-hover-opacity: 0.3;
 }
+
+@layer components {
+}
+
+.p-button {
+  background-color: #6bb7be;
+  border-color: #6bb7be;
+}
+.p-button:hover {
+  background-color: #63c9be;
+  border-color: #71dab3;
+}
