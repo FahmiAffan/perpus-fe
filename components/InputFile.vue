@@ -1,20 +1,22 @@
 <template>
   <div>
-    <input
+    <Field
       type="file"
-      name="file"
-      id="file"
+      :name="props.name"
+      :id="props.name"
       class="inputfile"
       accept=".png , .jpg , .jpeg"
       @change="handleFileInputChange"
+      v-model="model"
     />
-    <label for="file" class="flex border-[1px] rounded-lg border-[#bfbfbf]">
-      <div class="grow-0 w-full  p-2">
-        <div v-if="file != null" class="text-black">
-          {{ file.name }}
-        </div>
-
-        <div v-else class="text-black text-[#64748b]">{{ label }}</div>
+    <p class="text-[14px] mb-1 font-semibold">{{ props.label }}</p>
+    <label
+      :for="props.name"
+      class="flex border-[1px] rounded-lg border-[#bfbfbf] cursor-pointer"
+    >
+      <div class="grow-0 w-full pl-3 p-2">
+        <p class="text-black text-[#64748b]">{{ props.placeholder }}</p>
+        <p>{{ model }}</p>
       </div>
 
       <div class="grow-1 flex justify-end w-full">
@@ -22,27 +24,38 @@
         <Icon name="mdi:tray-arrow-up" class="m-2 text-[#64748b]"></Icon>
       </div>
     </label>
+    <ErrorMessage :name="props.name" v-slot="{ message }">
+      <p class="text-red-600">
+        {{ message }}
+      </p>
+    </ErrorMessage>
   </div>
 </template>
 
 <script setup>
 const props = defineProps({
-  value: File, // or whatever type you need
+  // value: File, // or whatever type you need
   label: String,
+  placeholder: String,
+  name: String,
 });
 
-const emit = defineEmits(["input"]);
+// const emit = defineEmits(["input"]);
 
-const inputValue = ref(props.value);
+let model = defineModel();
+const components = defineComponent(model);
+
+// const inputValue = ref(props.value);
 
 const handleFileInputChange = (event) => {
-  inputValue.value = event.target.value;
-  console.log(event.target.value)
-  emit("input", inputValue.value);
+  // inputValue.value = event.target.value;
+  console.log(event.target.value);
+  model = event.target.value;
+  // emit("input", inputValue.value);
 };
 </script>
 
-<style module lang="css">
+<style lang="css">
 .inputfile {
   width: 0.1px;
   height: 0.1px;
@@ -50,6 +63,7 @@ const handleFileInputChange = (event) => {
   overflow: hidden;
   position: absolute;
   z-index: -1;
+  display: none;
 }
 
 .label {

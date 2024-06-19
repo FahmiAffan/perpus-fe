@@ -53,6 +53,7 @@
       tipe="edit"
     >
       <template v-slot:body>
+        <Button @click="form.date = null">Clear Tgl</Button>
         <div class="flex flex-col">
           <div class="flex flex-col py-2">
             <div class="flex flex-col py-2">
@@ -60,6 +61,7 @@
                 name="judul_buku"
                 label="Judul Buku"
                 v-model="form.judul_buku"
+                placeholder="Masukkan Judul Buku"
               ></InputString>
             </div>
             <div class="flex flex-col py-2">
@@ -67,6 +69,7 @@
                 name="deskripsi"
                 label="Deskripsi"
                 v-model="form.deskripsi"
+                placeholder="Masukkan Deskripsi Buku"
               ></InputString>
             </div>
             <div class="flex flex-col py-2">
@@ -74,6 +77,7 @@
                 name="penerbit"
                 label="penerbit"
                 v-model="form.penerbit"
+                placeholder="Masukkan Penerbit Buku"
               ></InputString>
             </div>
             <div class="flex flex-col py-2">
@@ -81,72 +85,56 @@
                 name="qty"
                 label="Quantity Buku"
                 v-model="form.qty"
+                placeholder="Masukkan Quantitas Buku"
               ></InputNomor>
             </div>
             <div class="flex flex-col py-2">
-              <InputString
+              <InputDate
+                v-model="form.date"
+                placeholder="Pilih Tanggal Pinjam"
+                label="Tanggal Pinjam"
+                disabled="true"
+                name="date"
+              />
+            </div>
+            <div class="flex flex-col py-2">
+              <InputDate
+                v-model="form.date2"
+                placeholder="Pilih Tanggal Pengembalian"
+                label="Tanggal Pengembalian"
+                name="date2"
+              />
+            </div>
+            <div class="flex flex-col py-2">
+              <InputFile
+                v-model="form.image"
+                name="image"
+                placeholder="Pilih Tanggal Pengembalian"
+                label="Tanggal Pengembalian"
+              />
+            </div>
+            <div class="flex flex-col py-2">
+              <InputFile
+                v-model="form.image2"
+                name="image2"
+                placeholder="Pilih Tanggal Pengembalian"
+                label="Tanggal Pengembalian"
+              />
+            </div>
+            <div class="flex flex-col py-2">
+              <CDropDown
                 v-model="form.tipe"
-                :options="tipe_buku"
                 name="tipe"
-                label="Tipe Buku"
+                placeholder="Pilih Tipe
+              Buku"
+                label="tipe"
+                optionLabel="tipe"
+                :opsi="tipe_buku"
               />
             </div>
           </div>
         </div>
-      </template>
-    </DialogForm>
-
-    <DialogForm
-      :dialog="dialogEdit"
-      @update:dialog="openDialog2"
-      header="Tambah Buku"
-      @submit:form="submit"
-      :schema="schema"
-      :form="formRef"
-      api="buku"
-      tipe="edit"
-    >
-      <template v-slot:body>
-        <div class="flex flex-col">
-          <div class="flex flex-col py-2">
-            <div class="flex flex-col py-2">
-              <InputString
-                name="judul_buku"
-                label="Judul Buku"
-                v-model="formEdit.judul_buku"
-              ></InputString>
-            </div>
-            <div class="flex flex-col py-2">
-              <InputString
-                name="deskripsi"
-                label="Deskripsi"
-                v-model="form.deskripsi"
-              ></InputString>
-            </div>
-            <div class="flex flex-col py-2">
-              <InputString
-                name="penerbit"
-                label="penerbit"
-                v-model="form.penerbit"
-              ></InputString>
-            </div>
-            <div class="flex flex-col py-2">
-              <InputNomor
-                name="qty"
-                label="Quantity Buku"
-                v-model="form.qty"
-              ></InputNomor>
-            </div>
-            <div class="flex flex-col py-2">
-              <InputString
-                v-model="form.tipe"
-                :options="tipe_buku"
-                name="tipe"
-                label="Tipe Buku"
-              />
-            </div>
-          </div>
-        </div>
+        {{ form }}
       </template>
     </DialogForm>
   </div>
@@ -157,26 +145,17 @@ import * as zod from "zod";
 
 let self = useNuxtApp();
 let dialog = ref(false);
-let dialogEdit = ref(false);
 let menu = ref(false);
 
 const header = ["No", "Nama", "Penerbit", "Aksi"];
-
-const data = reactive([
-  {
-    nama: "John Doe",
-  },
-]);
 
 const color = "#F7F9FA";
 
 const tipe_buku = reactive([
   {
-    id: 1,
     tipe: "book",
   },
   {
-    id: 2,
     tipe: "ebook",
   },
 ]);
@@ -188,7 +167,9 @@ const schema = {
   tipe: zod.string().min(1, { message: "Harus Diisi" }),
   qty: zod
     .number({ message: "Harus berupa angka" })
-    .min(1, { message: "Harus Diisi" }),
+    .min(0, { message: "Jumlah tidak boleh kurang dari 0" }),
+  tipe: zod.string().refine((val) => {}),
+  tipe: zod.string().min(1, { message: "Harus Diisi" }),
 };
 
 const form = reactive({
@@ -196,12 +177,17 @@ const form = reactive({
   penerbit: "",
   deskripsi: "",
   tipe: "book",
-  qty: 1,
+  qty: 0,
+  date: null,
+  date2: null,
+  image: null,
+  image2: null,
 });
 
 const formBody = [
   {
     label: "",
+    name: "",
     value: "",
   },
 ];

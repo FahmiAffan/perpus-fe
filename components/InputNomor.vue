@@ -1,5 +1,7 @@
 <template>
-  <label :for="props.name" class="text-[14px] font-semibold">{{ label }}</label>
+  <label :for="props.name" class="text-[14px] mb-1 font-semibold">{{
+    label
+  }}</label>
   <Field
     type="number"
     :id="props.name"
@@ -7,7 +9,9 @@
     class="input p-2 w-full border-[1px] h-[39px] rounded-lg text-[#64748b] border-[#bfbfbf]"
     v-model="model"
   />
-  <ErrorMessage :name="props.name" />
+  <ErrorMessage :name="props.name" v-slot="{ message }">
+    <p class="text-red-600">{{ message }}</p>
+  </ErrorMessage>
   <!-- @input="$emit('update:modelValue', $event.target?.value)" -->
 </template>
 
