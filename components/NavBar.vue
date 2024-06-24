@@ -14,6 +14,7 @@
             <p class="text-[18px]">BOOK</p>
           </NuxtLink>
         </div>
+        {{ tokenWatcher }}
       </div>
       <Button
         class="h-[41px]"
@@ -61,7 +62,10 @@
               <h1 class="pl-4 font-medium text-[14px]">Profile</h1>
             </div>
           </NuxtLink>
-          <div class="flex align-center px-7 pb-4 pt-4 hover:bg-gray-100" @click="LogOut()">
+          <div
+            class="flex align-center px-7 pb-4 pt-4 hover:bg-gray-100"
+            @click="LogOut()"
+          >
             <Icon name="mdi:power"></Icon>
             <h1 class="pl-4 font-medium text-[14px]">Sign Out</h1>
           </div>
@@ -79,7 +83,12 @@ let token = $locally.getItem("token");
 
 function LogOut() {
   $axios.post("/logout").then(() => {
-    $locally.removeItem("token")
+    $locally.removeItem("token");
+    state().isLoggedin = false;
   });
 }
+
+const tokenWatcher = computed(() => {
+  return state().isLoggedin;
+});
 </script>

@@ -34,5 +34,8 @@ export async function updateData(url, id, req) {
     })
     .catch((err) => {
       return err;
+    })
+    .finally((res) => {
+      return res;
     });
 }

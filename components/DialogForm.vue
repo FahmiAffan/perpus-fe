@@ -62,6 +62,10 @@ let props = defineProps({
     type: String,
     default: "",
   },
+  containImage: {
+    type: Boolean,
+    default: false,
+  },
   schema: Object,
 });
 
@@ -84,13 +88,53 @@ function increment() {
 // });
 
 function submit(value) {
-  console.log(props.tipe);
-  postData(`/${props.api}`, value).then(async (res) => {
-    console.log(res);
-    await formRef.value.resetForm();
-    increment();
-    refreshData();
-  });
+  if (props.tipe == "edit") {
+    if (props.containImage == false) {
+      updateData(`/${props.api}/` + value.id, value).then(async (res) => {
+        await formRef.value.resetForm();
+        increment();
+        refreshData();
+      });
+    }
+  }
+  if (props.tipe == "tambah") {
+    if (props.containImage == false) {
+      postData(`/${props.api}`, value).then(async (res) => {
+        console.log(res);
+        await formRef.value.resetForm();
+        increment();
+        refreshData();
+      });
+    }
+    if (props.containImage == true) {
+      Object.keys(value).forEach(async (key, index) => {
+        if (value["image"]) {
+          const promise = new Promise((resolve, reject) => {
+            const files = value["image"];
+            const reader = new FileReader();
+            reader.onload = (events) => {
+              // const file = events.target.result.split(",")[1];
+              resolve(events.target.result);
+            };
+            reader.readAsDataURL(files);
+          });
+
+          await promise.then(async (res) => {
+            value["image"] = await res;
+          });
+        }
+      });
+
+      setTimeout(() => {
+        postData(`/${props.api}`, value).then(async (res) => {
+          console.log(res);
+          await formRef.value.resetForm();
+          increment();
+          refreshData();
+        });
+      }, 1000);
+    }
+  }
 }
 
 const validationSchema = toTypedSchema(zod.object(props.schema));

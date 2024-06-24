@@ -3,20 +3,22 @@
     <Field
       type="file"
       :name="props.name"
-      :id="props.name"
       class="inputfile"
       accept=".png , .jpg , .jpeg"
-      @change="handleFileInputChange"
       v-model="model"
+      :id="props.name"
     />
-    <p class="text-[14px] mb-1 font-semibold">{{ props.label }}</p>
+    <label :for="props.name" class="text-[14px] mb-1 font-semibold">{{
+      props.label
+    }}</label>
     <label
       :for="props.name"
       class="flex border-[1px] rounded-lg border-[#bfbfbf] cursor-pointer"
     >
       <div class="grow-0 w-full pl-3 p-2">
-        <p class="text-black text-[#64748b]">{{ props.placeholder }}</p>
-        <p>{{ model }}</p>
+        <p class="text-black text-[#64748b]">
+          {{ model == null ? props.placeholder : filenameOnChange }}
+        </p>
       </div>
 
       <div class="grow-1 flex justify-end w-full">
@@ -40,19 +42,28 @@ const props = defineProps({
   name: String,
 });
 
-// const emit = defineEmits(["input"]);
-
 let model = defineModel();
 const components = defineComponent(model);
 
-// const inputValue = ref(props.value);
+let handleFileInputChange = async (event) => {
+  const files = event.target.files[0];
+  const promise = new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (events) => {
+      const file = events.target.result.split(",")[1];
+      resolve(JSON.stringify(file));
+    };
+    reader.readAsDataURL(files);
+  });
 
-const handleFileInputChange = (event) => {
-  // inputValue.value = event.target.value;
-  console.log(event.target.value);
-  model = event.target.value;
-  // emit("input", inputValue.value);
+  await promise.then((res) => {
+    model = res;
+  });
 };
+
+const filenameOnChange = computed(() => {
+  return model.value.name;
+});
 </script>
 
 <style lang="css">

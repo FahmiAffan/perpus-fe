@@ -4,6 +4,7 @@ export const useStore = defineStore("Store", {
   state: () => ({
     characters: [{}],
     user: "",
+    isLoggedin: false,
   }),
   // getters: {
 

@@ -20,6 +20,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       }
     })
     .catch((err) => {
+      state().isLoggedin = false;
       useNuxtApp().$router.push({ path: "/login" });
     });
   // }

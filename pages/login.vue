@@ -39,23 +39,14 @@
           />
           <!-- .dark:hover:bg-primary-300:hover -->
           <div class="mb-[32px] flex justify-between pt-[19px]">
-            <div class="flex items-center">
-              <Checkbox
-                id="checkbox"
-                v-model="form.checked"
-                outlined
-                :binary="true"
-              />
-              <label for="checkbox" class="text-[#000000] text-[12px] pl-2"
-                >Remember Me</label
-              >
-            </div>
+            <CCheckBox name="checkbox" v-model="form.checked"></CCheckBox>
           </div>
 
           <Button type="submit" class="flex justify-center">
             <h1 class="font-bold">Log In</h1>
           </Button>
         </form>
+        {{ form }}
       </template>
     </Card>
   </div>
@@ -71,7 +62,7 @@ const data = state();
 let form = reactive({
   nik: null,
   password: "",
-  checked: "",
+  checked: false,
 });
 
 async function test() {
@@ -89,20 +80,20 @@ async function Submit() {
     password: form.password,
   })
     .then((res) => {
-      data.user = res.data
+      data.user = res.data;
+      data.isLoggedin = true;
+      if (form.checked == true) {
+        self.$locally.setItem("token", res.data.refreshToken);
+      } else {
+        self.$locally.setItem("token", res.data.accessToken);
+      }
+
       if (res.data.user.role == "petugas") {
-        localStorage.setItem("token", res.data.accessToken);
         router.push({ path: "/petugas" });
       }
       if (res.data.user.role == "siswa") {
-        localStorage.setItem("token", res.data.accessToken);
         router.push({ path: "/petugas" });
       }
-      // if (checked == false) {
-      //   localStorage.setItem("token", res.data.accessToken);
-      // } else {
-      //   localStorage.setItem("token", res.data.refreshToken);
-      // }
     })
     .catch((err) => {
       self.$toast.add({

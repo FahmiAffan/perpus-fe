@@ -1,17 +1,46 @@
 <template>
   <div class="w-full">
     <div class="flex">
-      <div class="grow text-right">
+      <!-- <div class="grow text-right">
         <Button
           class="w-[219px] h-[39px] flex justify-center"
-          @click="dialog = !dialog"
+          @click="openDialog"
           >Tambah Buku</Button
         >
+      </div> -->
+
+      <!-- <div class="grow text-right">
+        <CButton
+          class="w-[219px] h-[39px] flex justify-center"
+          @click="dialogKey[0].openDialog"
+          >Tambah Buku</CButton
+        >
       </div>
+      <div class="grow text-right">
+        <CButton
+          class="w-[219px] h-[39px] flex justify-center"
+          @click="dialogKey[1].openDialog"
+          >Edit Buku</CButton
+        >
+      </div> -->
+      <button
+        @click="dialogKey[0].openDialog"
+        class="bg-[#6BB7BE] rounded-lg text-white p-2"
+      >
+        Tambah Buku
+      </button>
+      <button
+        @click="dialogKey[1].openDialog"
+        class="bg-[#6BB7BE] rounded-lg text-white p-2"
+      >
+        Edit Buku
+      </button>
+      <!-- <CButton @click="dialogKey[0].openDialog">Edit Buku</CButton> -->
     </div>
 
+    {{ dialogKey }}
     <div v-if="dataFetched">
-      <Table :header="header" :data="data" :color="color">
+      <Table :header="header" :color="color">
         <template v-slot:body>
           <tr
             v-for="(i, index) in buku"
@@ -40,7 +69,7 @@
     <MenuBar :menu="menu" @update:menu="openMenu" :items="item"></MenuBar>
     {{ menu }}-->
 
-    <DialogForm
+    <!-- <DialogForm
       :dialog="dialog"
       @update:dialog="openDialog"
       header="Tambah Buku"
@@ -51,6 +80,20 @@
       :formData="formData"
       api="buku"
       tipe="edit"
+    > -->
+    <DialogForm
+      v-for="i in dialogKey"
+      :key="i"
+      :dialog="i.dialog"
+      @update:dialog="i.openDialog()"
+      :header="i.header"
+      @refresh-data="getData"
+      :schema="schema"
+      :form="i.formRef"
+      :formData="formData"
+      api="buku"
+      :tipe="i.tipe"
+      :containImage="true"
     >
       <template v-slot:body>
         <Button @click="form.date = null">Clear Tgl</Button>
@@ -89,36 +132,11 @@
               ></InputNomor>
             </div>
             <div class="flex flex-col py-2">
-              <InputDate
-                v-model="form.date"
-                placeholder="Pilih Tanggal Pinjam"
-                label="Tanggal Pinjam"
-                disabled="true"
-                name="date"
-              />
-            </div>
-            <div class="flex flex-col py-2">
-              <InputDate
-                v-model="form.date2"
-                placeholder="Pilih Tanggal Pengembalian"
-                label="Tanggal Pengembalian"
-                name="date2"
-              />
-            </div>
-            <div class="flex flex-col py-2">
               <InputFile
-                v-model="form.image"
                 name="image"
-                placeholder="Pilih Tanggal Pengembalian"
-                label="Tanggal Pengembalian"
-              />
-            </div>
-            <div class="flex flex-col py-2">
-              <InputFile
-                v-model="form.image2"
-                name="image2"
-                placeholder="Pilih Tanggal Pengembalian"
-                label="Tanggal Pengembalian"
+                placeholder="Upload Cover Buku Disini"
+                label="Cover"
+                v-model="form.image"
               />
             </div>
             <div class="flex flex-col py-2">
@@ -127,9 +145,10 @@
                 name="tipe"
                 placeholder="Pilih Tipe
               Buku"
-                label="tipe"
+                label="Tipe Buku"
                 optionLabel="tipe"
                 :opsi="tipe_buku"
+                type="single"
               />
             </div>
           </div>
@@ -151,14 +170,19 @@ const header = ["No", "Nama", "Penerbit", "Aksi"];
 
 const color = "#F7F9FA";
 
-const tipe_buku = reactive([
-  {
-    tipe: "book",
-  },
-  {
-    tipe: "ebook",
-  },
-]);
+// const tipe_buku = reactive([
+//   {
+//     id: 1,
+//     tipe: "book",
+//   },
+//   {
+//     id: 2,
+//     tipe: "ebook",
+//   },
+// ]);
+const tipe_buku = reactive(["book", "ebook"]);
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const schema = {
   judul_buku: zod.string().min(1, { message: "Harus Diisi" }),
@@ -168,29 +192,33 @@ const schema = {
   qty: zod
     .number({ message: "Harus berupa angka" })
     .min(0, { message: "Jumlah tidak boleh kurang dari 0" }),
-  tipe: zod.string().refine((val) => {}),
-  tipe: zod.string().min(1, { message: "Harus Diisi" }),
+  // image: zod
+  //   .object({
+  //     name: zod.string(),
+  //     size: zod.number().max(MAX_FILE_SIZE, {
+  //       message: `File size should be less than ${
+  //         MAX_FILE_SIZE / 1024 / 1024
+  //       } MB`,
+  //     }),
+  //   })
+  //   .refine((file) => file.size <= MAX_FILE_SIZE, {
+  //     message: `File size should be less than ${
+  //       MAX_FILE_SIZE / 1024 / 1024
+  //     } MB`,
+  //   }),
+  image: zod.any().refine((file) => file?.size <= MAX_FILE_SIZE, {
+    message: `File size should be less than ${MAX_FILE_SIZE / 1024 / 1024} MB`,
+  }),
 };
 
-const form = reactive({
+const form = ref({
   judul_buku: "",
   penerbit: "",
   deskripsi: "",
   tipe: "book",
   qty: 0,
-  date: null,
-  date2: null,
   image: null,
-  image2: null,
 });
-
-const formBody = [
-  {
-    label: "",
-    name: "",
-    value: "",
-  },
-];
 
 const item = [
   {
@@ -209,9 +237,50 @@ const item = [
   },
 ];
 
-function openDialog(val) {
-  dialog.value = val;
-}
+var dialogKey = ref([
+  {
+    dialog: false,
+    tipe: "tambah",
+    api: "buku",
+    header: "Tambah Buku",
+    openDialog: function (value) {
+      console.log(value);
+      console.log(this.api);
+      this.dialog = !this.dialog;
+    },
+    formRef: "tambah",
+  },
+  {
+    dialog: false,
+    tipe: "edit",
+    api: "buku",
+    header: "Edit Buku",
+    openDialog: function (value) {
+      this.dialog = value;
+    },
+    formRef: "edit",
+  },
+]);
+
+const properties = [
+  {
+    obj: "asfasf",
+    function: function () {
+      console.log(this.obj);
+    },
+  },
+  {
+    obj: "walawe",
+    function: function () {
+      console.log(this.obj);
+    },
+  },
+];
+
+// function openDialog(val) {
+//   dialog.value = val;
+//   console.log(val);
+// }
 
 function openDialog2(val) {
   dialog.value = val;
