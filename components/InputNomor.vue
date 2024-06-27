@@ -8,6 +8,7 @@
     :name="props.name"
     class="input p-2 w-full border-[1px] h-[39px] rounded-lg text-[#64748b] border-[#bfbfbf]"
     v-model="model"
+    :placeholder="props.placeholder"
   />
   <ErrorMessage :name="props.name" v-slot="{ message }">
     <p class="text-red-600">{{ message }}</p>
@@ -17,12 +18,10 @@
 
 <script setup>
 const props = defineProps({
-  value: {
-    type: String,
-    default: 0,
-  },
+  value: Number,
   name: String,
   label: String,
+  placeholder: String,
 });
 
 const model = defineModel();

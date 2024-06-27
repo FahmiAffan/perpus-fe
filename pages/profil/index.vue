@@ -2,7 +2,6 @@
   <div class="container mx-auto">
     <NavBar></NavBar>
     <div class="flex mt-[55px]">
-      {{ data }}
       <SidebarProfil class="grow-0"> </SidebarProfil>
       <DetailProfil class="grow-1 ml-6"> </DetailProfil>
     </div>
@@ -10,10 +9,12 @@
 </template>
 
 <script setup>
-const data = getData("buku");
+let data = ref(null);
 
 onMounted(() => {
-  data;
+  getData("buku").then((res) => {
+    data.value = res.data.data;
+  });
 });
 </script>
 

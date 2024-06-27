@@ -1,44 +1,15 @@
 <template>
   <div class="w-full">
     <div class="flex">
-      <!-- <div class="grow text-right">
-        <Button
-          class="w-[219px] h-[39px] flex justify-center"
-          @click="openDialog"
-          >Tambah Buku</Button
-        >
-      </div> -->
-
-      <!-- <div class="grow text-right">
-        <CButton
-          class="w-[219px] h-[39px] flex justify-center"
-          @click="dialogKey[0].openDialog"
-          >Tambah Buku</CButton
-        >
-      </div>
-      <div class="grow text-right">
-        <CButton
-          class="w-[219px] h-[39px] flex justify-center"
-          @click="dialogKey[1].openDialog"
-          >Edit Buku</CButton
-        >
-      </div> -->
       <button
         @click="dialogKey[0].openDialog"
         class="bg-[#6BB7BE] rounded-lg text-white p-2"
       >
         Tambah Buku
       </button>
-      <button
-        @click="dialogKey[1].openDialog"
-        class="bg-[#6BB7BE] rounded-lg text-white p-2"
-      >
-        Edit Buku
-      </button>
       <!-- <CButton @click="dialogKey[0].openDialog">Edit Buku</CButton> -->
+       {{ buku }}
     </div>
-
-    {{ dialogKey }}
     <div v-if="dataFetched">
       <Table :header="header" :color="color">
         <template v-slot:body>
@@ -57,6 +28,14 @@
                   class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
                   size="30"
                   @click="deleteData(i.id_buku)"
+                ></Icon>
+              </div>
+              <div>
+                <Icon
+                  name="heroicons-solid:pencil-alt"
+                  class="text-black rounded-full p-1 bg-white hover:bg-gray-200"
+                  size="30"
+                  @click="dialogKey[1].openDialog(i)"
                 ></Icon>
               </div>
             </td>
@@ -96,7 +75,6 @@
       :containImage="true"
     >
       <template v-slot:body>
-        <Button @click="form.date = null">Clear Tgl</Button>
         <div class="flex flex-col">
           <div class="flex flex-col py-2">
             <div class="flex flex-col py-2">
@@ -153,7 +131,6 @@
             </div>
           </div>
         </div>
-        {{ form }}
       </template>
     </DialogForm>
   </div>
@@ -163,8 +140,6 @@
 import * as zod from "zod";
 
 let self = useNuxtApp();
-let dialog = ref(false);
-let menu = ref(false);
 
 const header = ["No", "Nama", "Penerbit", "Aksi"];
 
@@ -192,26 +167,12 @@ const schema = {
   qty: zod
     .number({ message: "Harus berupa angka" })
     .min(0, { message: "Jumlah tidak boleh kurang dari 0" }),
-  // image: zod
-  //   .object({
-  //     name: zod.string(),
-  //     size: zod.number().max(MAX_FILE_SIZE, {
-  //       message: `File size should be less than ${
-  //         MAX_FILE_SIZE / 1024 / 1024
-  //       } MB`,
-  //     }),
-  //   })
-  //   .refine((file) => file.size <= MAX_FILE_SIZE, {
-  //     message: `File size should be less than ${
-  //       MAX_FILE_SIZE / 1024 / 1024
-  //     } MB`,
-  //   }),
   image: zod.any().refine((file) => file?.size <= MAX_FILE_SIZE, {
     message: `File size should be less than ${MAX_FILE_SIZE / 1024 / 1024} MB`,
   }),
 };
 
-const form = ref({
+let form = ref({
   judul_buku: "",
   penerbit: "",
   deskripsi: "",
@@ -246,6 +207,9 @@ var dialogKey = ref([
     openDialog: function (value) {
       console.log(value);
       console.log(this.api);
+      Object.keys(form).forEach((key, index) => {
+        form[key] = null;
+      });
       this.dialog = !this.dialog;
     },
     formRef: "tambah",
@@ -256,49 +220,18 @@ var dialogKey = ref([
     api: "buku",
     header: "Edit Buku",
     openDialog: function (value) {
-      this.dialog = value;
+      if (value == undefined || this.dialog == true) {
+        return (this.dialog = false);
+      }
+      if (value != undefined || this.dialog == false) {
+        this.dialog = !this.dialog;
+        form = value;
+        state().selectedData = value;
+      }
     },
     formRef: "edit",
   },
 ]);
-
-const properties = [
-  {
-    obj: "asfasf",
-    function: function () {
-      console.log(this.obj);
-    },
-  },
-  {
-    obj: "walawe",
-    function: function () {
-      console.log(this.obj);
-    },
-  },
-];
-
-// function openDialog(val) {
-//   dialog.value = val;
-//   console.log(val);
-// }
-
-function openDialog2(val) {
-  dialog.value = val;
-}
-
-function submit() {
-  self.$axios
-    .post("/buku", {
-      judul_buku: form.judul_buku,
-      penerbit: form.penerbit,
-      deskripsi: form.deskripsi,
-      tipe: form.tipe.tipe,
-    })
-    .finally(() => {
-      getData();
-      openDialog();
-    });
-}
 
 let buku = ref(null);
 let dataFetched = ref(true);

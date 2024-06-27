@@ -29,7 +29,7 @@
             type="submit"
             label="Tambah"
             class="w-[83px] h-[39px] flex justify-center"
-            >Tambah</Button
+            >{{ props.tipe == "tambah" ? "Tambah" : "Simpan" }}</Button
           >
         </div>
       </Form>
@@ -60,7 +60,7 @@ let props = defineProps({
   },
   tipe: {
     type: String,
-    default: "",
+    // default: "tambah",
   },
   containImage: {
     type: Boolean,
@@ -87,14 +87,46 @@ function increment() {
 //   return x;
 // });
 
-function submit(value) {
+async function submit(value) {
   if (props.tipe == "edit") {
     if (props.containImage == false) {
-      updateData(`/${props.api}/` + value.id, value).then(async (res) => {
-        await formRef.value.resetForm();
-        increment();
-        refreshData();
+      const idName = Object.keys(state().selectedData)[0];
+      updateData(`/${props.api}/`, state().selectedData[idName], value).then(
+        async (res) => {
+          await formRef.value.resetForm();
+          increment();
+          refreshData();
+        }
+      );
+    }
+
+    if (props.containImage == true) {
+      const promise = new Promise((resolve, reject) => {
+        Object.keys(value).forEach(async (key, index) => {
+          if (value["image"]) {
+            const files = value["image"];
+            const reader = new FileReader();
+            reader.onload = (events) => {
+              resolve(events.target.result);
+            };
+            reader.readAsDataURL(files);
+          }
+        });
       });
+
+      await promise.then(async (res) => {
+        value["image"] = await res;
+      });
+
+      const idName = Object.keys(state().selectedData)[0];
+      updateData(`/${props.api}/`, state().selectedData[idName], value).then(
+        async (res) => {
+          console.log(res);
+          await formRef.value.resetForm();
+          increment();
+          refreshData();
+        }
+      );
     }
   }
   if (props.tipe == "tambah") {
@@ -107,9 +139,9 @@ function submit(value) {
       });
     }
     if (props.containImage == true) {
-      Object.keys(value).forEach(async (key, index) => {
-        if (value["image"]) {
-          const promise = new Promise((resolve, reject) => {
+      const promise = new Promise((resolve, reject) => {
+        Object.keys(value).forEach(async (key, index) => {
+          if (value["image"]) {
             const files = value["image"];
             const reader = new FileReader();
             reader.onload = (events) => {
@@ -117,22 +149,20 @@ function submit(value) {
               resolve(events.target.result);
             };
             reader.readAsDataURL(files);
-          });
-
-          await promise.then(async (res) => {
-            value["image"] = await res;
-          });
-        }
+          }
+        });
       });
 
-      setTimeout(() => {
-        postData(`/${props.api}`, value).then(async (res) => {
-          console.log(res);
-          await formRef.value.resetForm();
-          increment();
-          refreshData();
-        });
-      }, 1000);
+      await promise.then(async (res) => {
+        value["image"] = await res;
+      });
+
+      postData(`/${props.api}`, value).then(async (res) => {
+        console.log(res);
+        await formRef.value.resetForm();
+        increment();
+        refreshData();
+      });
     }
   }
 }

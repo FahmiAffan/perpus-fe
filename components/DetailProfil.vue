@@ -28,6 +28,7 @@
         <Button
           class="h-[36px] mr-[4px]"
           outlined
+          @click="profile()"
           style="
             background-color: white;
             border: 2px solid #6bb7be;
@@ -53,45 +54,104 @@
         <h1 class="text-[14px] text-[#64748B]">Edit informasi akun anda</h1>
       </div>
 
-      <div class="grid gap-2 gap-y-4 grid-cols-2 mt-4">
-        <div class="flex flex-col">
-          <label for="name" class="font-bold text-[14px]">Nama</label>
-          <InputText
-            id="name"
-            class="h-[38px] color-[#64748B]"
-            placeholder="Masukkan Nama"
-            v-model="nama"
-          ></InputText>
+      <Form ref="formRef" @submit="submit" :validation-schema="schema">
+        <div class="grid gap-2 gap-y-4 grid-cols-2 mt-4">
+          <div class="flex flex-col">
+            <label for="name" class="font-bold text-[14px]">Nama</label>
+            <InputString
+              id="name"
+              name="username"
+              class="h-[38px] color-[#64748B]"
+              placeholder="Masukkan Nama"
+              v-model="form.username"
+            ></InputString>
+          </div>
+          <div class="flex flex-col">
+            <label for="nik" class="font-bold text-[14px]">NIK</label>
+            <InputNomor
+              inputId="nik"
+              name="nik"
+              :useGrouping="false"
+              class="h-[38px] color-[#64748B]"
+              placeholder="Masukkan NIK"
+              v-model="form.nik"
+            ></InputNomor>
+          </div>
+          <div class="flex flex-col">
+            <label for="telp" class="font-bold text-[14px]"
+              >Nomor Telepon</label
+            >
+            <InputString
+              inputId="telp"
+              name="telp"
+              :useGrouping="false"
+              class="h-[38px] color-[#64748B]"
+              placeholder="Masukkan Nomor Telepon"
+              v-model="form.telp"
+            ></InputString>
+          </div>
         </div>
-        <div class="flex flex-col">
-          <label for="nik" class="font-bold text-[14px]">NIK</label>
-          <InputNumber
-            inputId="nik"
-            :useGrouping="false"
-            class="h-[38px] color-[#64748B]"
-            placeholder="Masukkan NIK"
-            v-model="nik"
-          ></InputNumber>
-        </div>
-        <div class="flex flex-col">
-          <label for="telp" class="font-bold text-[14px]">Nomor Telepon</label>
-          <InputNumber
-            inputId="telp"
-            :useGrouping="false"
-            class="h-[38px] color-[#64748B]"
-            placeholder="Masukkan Nomor Telepon"
-            v-model="telp"
-          ></InputNumber>
-        </div>
-      </div>
 
-      <Button class="mt-9 h-9">Perbarui Profil</Button>
+        <Button class="mt-9 h-9" type="submit">Perbarui Profil</Button>
+      </Form>
     </div>
   </div>
 </template>
 
 <script setup>
-let nama = ref("");
-let nik,
-  telp = ref(null);
+import * as zod from "zod";
+
+const form = reactive({
+  username: "",
+  nik: 0,
+  telp: 0,
+});
+
+const formRef = ref();
+
+const schema = toTypedSchema(
+  zod.object({
+    username: zod
+      .string({ message: "Harus Berupa Huruf" })
+      .min(1, { message: "Harus Diisi" }),
+    nik: zod
+      .string({ message: "Harus Berupa angka" })
+      .min(1, { message: "Harus Diisi" }),
+    telp: zod
+      .string({ message: "Harus Berupa angka" })
+      .min(1, { message: "Harus Diisi" }),
+  })
+);
+
+// let valueWathcer = computed(() => {
+//   const obj = ref({
+//     nama: nama,
+//     nik: telp,
+//     telp: telp,
+//   });
+//   return obj;
+// });
+
+watch(state(), (newValue, oldValue) => {
+  form.username = newValue.user.username;
+  form.nik = newValue.user.nik;
+  form.telp = newValue.user.telp;
+});
+
+const submit = (value) => {
+  updateData(`/users/`, state().user.id_user, value);
+};
+
+let file = ref(null);
+
+const profile = () => {
+  openFile().then((res) => {
+    convertImageToBase64(res).then((res2) => {
+      updateData("/users/", state().user.id_user, {
+        image: res2,
+      });
+      console.log(res);
+    });
+  });
+};
 </script>

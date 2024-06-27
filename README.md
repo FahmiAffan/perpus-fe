@@ -1,78 +1,72 @@
-# Nuxt 3 Minimal Starter
+## Persiapan
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
-## Setup
-
-Make sure to install the dependencies:
+Install dependencies
 
 ```bash
 # npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
+Lalu Jalankan mode Developing
 
 ```bash
 # npm
 npm run dev
 
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+## State
+> State management menggunakan Pinia rubahan dari VUEX yang merupakan default state management dari nuxt
 
-Build the application for production:
+## Api
+Menggunakan Axios untuk fetch api rubahan dari fungsi fetch bawaan Vue. Axios telah di setting untuk menampilkan toast secara otomatis apabila terdapat response berupa error. ada beberapa method untuk memanggil fungsi dari axios tersebut.
 
-```bash
-# npm
-npm run build
+__$axios()__
+fungsi tersebut adalah sebuah nilai kembali dari plugin axios yang dapat diakses secara global oleh nuxt.
 
-# pnpm
-pnpm run build
+__getData(url)__
+menjalankan fungsi HTTP GET untuk mengambil data dari parameter url
 
-# yarn
-yarn build
+parameter
+_url: String_
 
-# bun
-bun run build
-```
+__postData( url , value )__
+menjalankan fungsi HTTP POST untuk mengambil data dari parameter url dan mengirimkan sebuah request body dalam bentuk JSON.
 
-Locally preview production build:
+parameter
+_url: String_
+_value: Object_
 
-```bash
-# npm
-npm run preview
+__updateData( url , id , value )__
+menjalankan fungsi HTTP POST untuk mengambil data dari parameter url dan mengirimkan sebuah request body dalam bentuk JSON.
 
-# pnpm
-pnpm run preview
+parameter
+_url: String_
 
-# yarn
-yarn preview
+id
+_url: String_
 
-# bun
-bun run preview
-```
+value
+_url: Object_
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Toast
+> Menggunakan Komponen yang disediakan oleh primevue
 
 
-Untuk Penggunaan Component Input Custom Text Anda harus menyertakan attribut v-model dan name agar input dapat berjalan
+## Validasi
+
+
+## Custom Component
+Sebuah komponen sederhana untuk menunjang kebutuhan website anda agar lebih interaktif dan menarik. Custom Component Input dapat tervalidasi dan sudah terintegrasi ke komponen validasi lainnya
+
+> Untuk Component bawaan dari Primevue anda bisa lihat dokumentasinya [*Disini*](https://primevue.org/)
+## Custom Logic Function
+
+__openFile()__
+digunakan ketika sebuah komponen memerlukan action berupa membuka tab file dari user
+
+__convertImageToBase64(file)__
+sebuah fungsi untuk mengkonversikan data pada object file ke base64  
+parameters:
+file : File
+

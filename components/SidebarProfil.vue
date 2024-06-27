@@ -6,8 +6,10 @@
       <Icon name="mdi:account-circle" size="80px" class="text-[#64748B]">
       </Icon>
       <div class="flex flex-col justify-center items-center">
-        <h1 class="text-[24px] font-bold">Fahmi Affan</h1>
-        <h1 class="text-[16px]">3212312421124</h1>
+        <h1 class="text-[24px] font-bold">
+          {{ state()?.user?.username }}
+        </h1>
+        <h1 class="text-[16px]">{{ state()?.user?.nik }}</h1>
       </div>
     </div>
     <div class="my-[44px]">
@@ -15,7 +17,7 @@
         <div class="flex items-center py-2">
           <Icon :name="i.icon" size="36px" class="text-[#64748B]"> </Icon>
           <h1 class="pl-[12px] text-[16px] font-bold text-[#64748B]">
-           {{ i.title }}
+            {{ i.title }}
           </h1>
         </div>
       </NuxtLink>
